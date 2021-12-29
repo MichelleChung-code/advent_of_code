@@ -56,9 +56,26 @@ def binary_diagnostic(binary_input: List[str]) -> float:
 
 
 def binary_diagnostic_part2(binary_input: list) -> float:
+    """
+    Compute the life support rating, which is implied by the oxygen and CO2 rates that can be found via the binary
+    diagnostic report:
+
+    Oxygen: continuously filtering out report entries based on the most common bit at a given position
+    CO2: continuously filtering out report entries based on the least common bit at a given position
+
+    If the most and least common bit at a certain position are the same, then: 1 will be taken for the oxygen rate next
+    filter and 0 if we are looking for CO2 rate. 
+
+    Args:
+        binary_input: <list> of strings of the binary diagnostic report
+
+    Returns:
+        life support rating: <float> multiplication of the decimal representations of the oxygen and co2 rates
+    """
     # generate the oxygen generator and CO2 scrubber rating
     # both of the above numbers are generated using bit criteria listed in: https://adventofcode.com/2021/day/3
 
+    # bits to use when 1 and 0 occurances at a given position are the same
     equal_consideration_dict = {'oxygen': '1',
                                 'CO2': '0'}
 
