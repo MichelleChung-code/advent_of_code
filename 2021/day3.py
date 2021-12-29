@@ -1,4 +1,5 @@
 import collections
+import copy
 import unittest
 from typing import List
 
@@ -55,8 +56,54 @@ def binary_diagnostic(binary_input: List[str]) -> float:
 
 
 def binary_diagnostic_part2(binary_input: list) -> float:
-    # todo
-    return
+    # generate the oxygen generator and CO2 scrubber rating
+    # both of the above numbers are generated using bit criteria listed in: https://adventofcode.com/2021/day/3
+
+    equal_consideration_dict = {'oxygen': '1',
+                                'CO2': '0'}
+
+    # split into characters by typecasting into list
+    binary_ls = list(map(list, binary_input))
+
+    oxygen_df = pd.DataFrame(binary_ls)
+    co2_df = copy.deepcopy(oxygen_df)
+
+    # get the most and least common element per column
+    # by definition, can only be either 0 or 1
+
+    # todo could refactor the two for loops into 1, but we only care about getting the correct answer right now
+    for col in oxygen_df.columns:
+        if oxygen_df.shape[0] == 1:
+            break
+        dict_count = collections.Counter(oxygen_df[col])
+        # order in ascending order by the values
+        dict_count = dict(sorted(dict_count.items(), key=lambda item: item[1]))
+        most_common_elem = list(dict_count.keys())[-1]
+
+        # filter the remaining df
+        if len(set(dict_count.values())) == 1:  # 1 and 0 occur equally
+            oxygen_df = oxygen_df.loc[oxygen_df[col] == equal_consideration_dict['oxygen']]
+        else:
+            oxygen_df = oxygen_df.loc[oxygen_df[col] == most_common_elem]
+
+    for col in co2_df.columns:
+        if co2_df.shape[0] == 1:
+            break
+        dict_count = collections.Counter(co2_df[col])
+        # order in ascending order by the values
+        dict_count = dict(sorted(dict_count.items(), key=lambda item: item[1]))
+        least_common_elem = list(dict_count.keys())[0]
+
+        # filter the remaining df
+        if len(set(dict_count.values())) == 1:
+            co2_df = co2_df.loc[co2_df[col] == equal_consideration_dict['CO2']]
+        else:
+            co2_df = co2_df.loc[co2_df[col] == least_common_elem]
+
+    # life support rating is the multiplication of the decimal representations of oxygen and CO2 rating
+    oxygen_rating = oxygen_df.agg(''.join, axis=1).iloc[0]
+    co2_rating = co2_df.agg(''.join, axis=1).iloc[0]
+    return int(oxygen_rating, 2) * int(co2_rating, 2)
 
 
 class TestBinaryDiagnostic(unittest.TestCase):
@@ -76,6 +123,22 @@ class TestBinaryDiagnostic(unittest.TestCase):
 
         self.assertEqual(198, binary_diagnostic(ls_test_input))
 
+    def test_binary_diagnostic_part2(self):
+        ls_test_input = ['00100',
+                         '11110',
+                         '10110',
+                         '10111',
+                         '10101',
+                         '01111',
+                         '00111',
+                         '11100',
+                         '10000',
+                         '11001',
+                         '00010',
+                         '01010']
+
+        self.assertEqual(230, binary_diagnostic_part2(ls_test_input))
+
 
 if __name__ == '__main__':
     # we need to read this in with the string converter, otherwise it
@@ -83,4 +146,4 @@ if __name__ == '__main__':
     problem_bin_input = list(df['value'])
     # problem_bin_input = list(map(str, problem_bin_input)) # using the converters when read in, instead
 
-    print(binary_diagnostic(problem_bin_input))
+    print(binary_diagnostic_part2(problem_bin_input))
