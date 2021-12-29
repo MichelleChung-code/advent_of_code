@@ -64,7 +64,7 @@ def binary_diagnostic_part2(binary_input: list) -> float:
     CO2: continuously filtering out report entries based on the least common bit at a given position
 
     If the most and least common bit at a certain position are the same, then: 1 will be taken for the oxygen rate next
-    filter and 0 if we are looking for CO2 rate. 
+    filter and 0 if we are looking for CO2 rate.
 
     Args:
         binary_input: <list> of strings of the binary diagnostic report
@@ -158,7 +158,8 @@ class TestBinaryDiagnostic(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    # we need to read this in with the string converter, otherwise it
+    # we need to read this in with the string converter, otherwise leading zeroes that are significant as we are working
+    # in binary, will be cut off
     df = pd.read_csv(r'./mfs_inputs/day3.csv', converters={'value': str})
     problem_bin_input = list(df['value'])
     # problem_bin_input = list(map(str, problem_bin_input)) # using the converters when read in, instead
