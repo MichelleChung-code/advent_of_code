@@ -42,5 +42,10 @@ def read_text_file(file_name):
 
 if __name__ == '__main__':
     draw_order_ls, bingo_sheets_ls = read_text_file(r'./mfs_inputs/day4_part1_sample.txt')
+    assert bingo_score(draw_order_ls, bingo_sheets_ls) == 4512
 
+    # actual problem
+    draw_order_ls, bingo_sheets_ls = read_text_file(r'./mfs_inputs/day4.txt')
     print(bingo_score(draw_order_ls, bingo_sheets_ls))
+
+
