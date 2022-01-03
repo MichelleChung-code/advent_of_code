@@ -1,8 +1,21 @@
+from typing import List
+
 import numpy as np
 import pandas as pd
 
 
-def bingo_score(draw_order_ls, bingo_sheets_ls) -> float:
+def bingo_score(draw_order_ls: list, bingo_sheets_ls: List[pd.DataFrame]) -> float:
+    """
+    Compute the score of the first bingo sheet to win (either a full row or full column).
+    Score is the sum of remaining elements multiplied by the element that caused the board to win.
+
+    Args:
+        draw_order_ls: list of elements to draw from (in order)
+        bingo_sheets_ls: list of the bingo sheet dataframes in the game
+
+    Returns:
+        first winner score
+    """
     for elem in draw_order_ls:
         for i in range(len(bingo_sheets_ls)):
             bingo_sheets_ls[i] = bingo_sheets_ls[i].replace(elem, np.NaN)
@@ -15,7 +28,17 @@ def bingo_score(draw_order_ls, bingo_sheets_ls) -> float:
                 return bingo_sheets_ls[i].sum().sum() * elem
 
 
-def bingo_score_win_last(draw_order_ls, bingo_sheets_ls) -> float:
+def bingo_score_win_last(draw_order_ls: list, bingo_sheets_ls: List[pd.DataFrame]) -> float:
+    """
+    Compute the bingo score of the last winner
+
+    Args:
+        draw_order_ls: list of the elements to draw
+        bingo_sheets_ls: dataframe list of the bingo sheets in the game
+
+    Returns:
+        Score of the last board to win
+    """
     steps_to_win_counter = [False] * len(bingo_sheets_ls)
     elem_to_win = [False] * len(bingo_sheets_ls)
     for i in range(len(bingo_sheets_ls)):
