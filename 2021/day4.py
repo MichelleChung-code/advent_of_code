@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -65,7 +65,17 @@ def bingo_score_win_last(draw_order_ls: list, bingo_sheets_ls: List[pd.DataFrame
     return bingo_sheets_ls[index_last_winner].sum().sum() * elem_to_win[index_last_winner]
 
 
-def read_text_file(file_name):
+def read_text_file(file_name: str) -> Tuple[list, List[pd.DataFrame]]:
+    """
+    Read in the bingo sheet order and sheet inputs from input text file.  Transform into a list of the draw elements
+    and parse the bingo sheets into list of dataframes.
+
+    Args:
+        file_name: path to txt file containing the draw order and bingo sheets inputs
+
+    Returns:
+        list of elements in the order to draw them, list of dataframes of the bingo sheets
+    """
     with open(file_name, 'r') as f:
         arr = f.read().splitlines()
 
